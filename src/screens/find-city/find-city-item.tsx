@@ -8,7 +8,7 @@ import { appActions } from '../../redux/slices/app.slice';
 const FindCityItem: FC<City> = (city: City) => {
   const dispatch = useAppDispatch();
 
-  const addCity = async () => {
+  const addCity = () => {
     dispatch(appActions.addCity(city));
   };
 
@@ -23,7 +23,7 @@ const FindCityItem: FC<City> = (city: City) => {
         </Text>
         <Text>{`${city.state}, ${city.country}`}</Text>
       </View>
-      <Button onPress={addCity} title="Select" />
+      <Button onPress={() => addCity()} title="Select" />
     </View>
   );
 };

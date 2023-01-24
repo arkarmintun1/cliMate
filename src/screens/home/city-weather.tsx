@@ -17,14 +17,13 @@ const CityWeather: FC<Props> = ({ cityId }) => {
   return (
     <View style={styles.root}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>{city.name}</Text>
+        <Text style={styles.cityName}>{city?.name}</Text>
       </View>
       <View style={styles.scrollViewContainer}>
         <ScrollView
           horizontal={true}
-          snapToInterval={Dimensions.get('screen').width}
-          decelerationRate={0}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled>
           <WeatherToday cityId={cityId} />
           <WeatherForecast cityId={cityId} />
         </ScrollView>
@@ -41,7 +40,6 @@ const styles = StyleSheet.create({
     height: bodyHeight,
   },
   city: {
-    height: 100,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -49,6 +47,7 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 70,
   },
   scrollViewContainer: {
     flexGrow: 1,

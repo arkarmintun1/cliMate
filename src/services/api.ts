@@ -3,7 +3,7 @@ import { City } from '../models/city';
 import { Unit } from '../models/general';
 
 const axiosInstance = axios.create({
-  baseURL: `https://api.openweathermap.org`,
+  baseURL: 'https://api.openweathermap.org',
   timeout: 30000,
 });
 
@@ -13,8 +13,7 @@ export const api = {
     return axiosInstance.get(url);
   },
   getWeather: (lat: number, lon: number, unit: Unit, appid: string) => {
-    const url = `/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appid}&unit=${unit}`;
-    console.log({ url });
+    const url = `/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appid}&units=${unit}`;
     return axiosInstance.get(url);
   },
 };

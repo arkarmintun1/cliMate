@@ -19,6 +19,8 @@ const FindCityScreen = ({}: Props) => {
   useEffect(() => {
     if (search && search.length) {
       dispatch(appActions.findCity(search));
+    } else {
+      dispatch(appActions.findCitySuccess([]));
     }
   }, [dispatch, search]);
 

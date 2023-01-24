@@ -35,7 +35,6 @@ function* findCity(action: ReturnType<typeof appActions.findCity>) {
         if (id) {
           const city = { id, ...vals };
           cities.push(city);
-          yield put(appActions.getWeather(city));
         }
       }
 
@@ -62,7 +61,9 @@ function* getWeathers() {
   }
 }
 
-function* getWeather(action: ReturnType<typeof appActions.getWeather>) {
+function* getWeather(
+  action: ReturnType<typeof appActions.getWeather | typeof appActions.addCity>,
+) {
   try {
     const city = action.payload;
     const unit: Unit = yield select(appSelectors.unit);
@@ -79,7 +80,6 @@ function* getWeather(action: ReturnType<typeof appActions.getWeather>) {
 
     if (response.status === 200) {
       const weathers = fromWeatherResponse(response.data);
-      console.log(weathers);
       yield put(appActions.getWeatherSuccess(city, weathers, unit));
     }
   } catch (e: any) {
@@ -87,8 +87,20 @@ function* getWeather(action: ReturnType<typeof appActions.getWeather>) {
   }
 }
 
+function* updateUnit(action: ReturnType<typeof appActions.updateUnit>) {
+  try {
+    const unit = action.payload;
+    yield put(appActions.setUnit(unit));
+    yield put(appActions.getWeathers());
+  } catch (e: any) {
+    console.error(e);
+  }
+}
+
 export function* appSagas() {
   yield debounce(2000, appActions.findCity.type, findCity);
+  yield takeEvery(appActions.addCity.type, getWeather);
   yield takeEvery(appActions.getWeathers.type, getWeathers);
   yield takeEvery(appActions.getWeather.type, getWeather);
+  yield takeEvery(appActions.updateUnit.type, updateUnit);
 }

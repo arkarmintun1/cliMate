@@ -1,20 +1,30 @@
+/* eslint-disable react-native/no-inline-styles */
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useLayoutEffect } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Screens } from '../../navigator/enums';
 import { RootStackParamList } from '../../navigator/types';
-import { useAppSelector } from '../../redux/hooks';
-import { appSelectors } from '../../redux/slices/app.slice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { appActions, appSelectors } from '../../redux/slices/app.slice';
+import { getTemperatureUnit } from '../../utils/unit';
 import CityWeather from './city-weather';
 import NoCity from './no-city';
 
 type Props = NativeStackScreenProps<RootStackParamList, Screens.Cities>;
 
 const CitiesScreen = ({ navigation }: Props) => {
+  const dispatch = useAppDispatch();
   const cityIds = useAppSelector(appSelectors.cityIds);
   const headerHeight = useHeaderHeight();
+  const unit = useAppSelector(appSelectors.unit);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,6 +42,14 @@ const CitiesScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const setImperialUnit = () => {
+    dispatch(appActions.updateUnit('imperial'));
+  };
+
+  const setMetricUnit = () => {
+    dispatch(appActions.updateUnit('metric'));
+  };
+
   return (
     <View style={[styles.root, { marginTop: headerHeight }]}>
       {cityIds && cityIds.length ? (
@@ -45,6 +63,30 @@ const CitiesScreen = ({ navigation }: Props) => {
       ) : (
         <NoCity />
       )}
+      <View style={styles.units}>
+        <Text
+          onPress={setImperialUnit}
+          style={[
+            styles.unit,
+            {
+              fontWeight: unit === 'imperial' ? 'bold' : 'normal',
+              paddingLeft: 25,
+            },
+          ]}>
+          {getTemperatureUnit('imperial')}
+        </Text>
+        <Text
+          onPress={setMetricUnit}
+          style={[
+            styles.unit,
+            {
+              fontWeight: unit === 'metric' ? 'bold' : 'normal',
+              paddingRight: 25,
+            },
+          ]}>
+          {getTemperatureUnit('metric')}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -61,5 +103,23 @@ const styles = StyleSheet.create({
   },
   flatList: {
     width: '100%',
+  },
+  units: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 40,
+    shadowColor: 'grey',
+    shadowOffset: {
+      width: -4,
+      height: 20,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 15,
+    backgroundColor: 'white',
+    borderRadius: 30,
+  },
+  unit: {
+    padding: 15,
+    fontSize: 18,
   },
 });

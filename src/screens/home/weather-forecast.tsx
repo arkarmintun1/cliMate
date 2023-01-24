@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
     display: 'flex',
     justifyContent: 'space-evenly',
+    marginBottom: 60,
   },
   card: {
     display: 'flex',

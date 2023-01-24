@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   info: {
     display: 'flex',
     alignItems: 'center',
+    flex: 1,
   },
   infoIcon: {
     fontSize: 25,

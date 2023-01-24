@@ -1,11 +1,19 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Dimensions,
   FlatList,
+  Image,
   StyleSheet,
   TouchableOpacity,
   View,
+  ViewabilityConfigCallbackPairs,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Screens } from '../../navigator/enums';
@@ -22,10 +30,36 @@ type Props = NativeStackScreenProps<RootStackParamList, Screens.Home>;
 const HomeScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const cityIds = useAppSelector(appSelectors.cityIds);
+  const cities = useAppSelector(appSelectors.cities);
+  const currentCityId = useAppSelector(appSelectors.currentCityId);
+  const [imageUrl, setImageUrl] = useState(
+    'https://picsum.photos/seed/city/500',
+  );
 
   useEffect(() => {
     dispatch(appActions.getWeathers());
   }, [dispatch]);
+
+  useEffect(() => {
+    const city = cities[currentCityId];
+    if (city) {
+      const url = `https://picsum.photos/seed/${city.id}/500`;
+      setImageUrl(url);
+    }
+  }, [cities, currentCityId]);
+
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: any }) => {
+      const cityId = viewableItems[0].key;
+      dispatch(appActions.setCurrentCityId(cityId));
+    },
+    [dispatch],
+  );
+
+  const viewabilityConfigCallbackPairs = useRef<ViewabilityConfigCallbackPairs>(
+    // @ts-ignore
+    [{ onViewableItemsChanged }],
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,8 +78,13 @@ const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   return (
-    <View style={{ backgroundColor: 'white' }}>
-      <View style={styles.header}></View>
+    <View style={styles.root}>
+      <View style={styles.header}>
+        <Image source={{ uri: imageUrl }} style={styles.image} blurRadius={5} />
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: imageUrl }} style={styles.imageCircle} />
+        </View>
+      </View>
       <View>
         <FlatList
           data={cityIds}
@@ -53,8 +92,10 @@ const HomeScreen = ({ navigation }: Props) => {
           renderItem={info => <CityWeather cityId={info.item} />}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item}
-          snapToInterval={bodyHeight}
-          decelerationRate={0}
+          pagingEnabled
+          viewabilityConfigCallbackPairs={
+            viewabilityConfigCallbackPairs.current
+          }
         />
       </View>
     </View>
@@ -64,8 +105,34 @@ const HomeScreen = ({ navigation }: Props) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  root: {
+    backgroundColor: 'white',
+  },
   header: {
     height: headerHeight,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    zIndex: -1,
+  },
+  imageContainer: {
+    position: 'absolute',
+    borderRadius: 50,
+    bottom: -50,
+    left: Dimensions.get('window').width / 2 - 50,
+    shadowColor: 'grey',
+    shadowOffset: {
+      width: -4,
+      height: 20,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 15,
+  },
+  imageCircle: {
+    borderRadius: 50,
+    width: 100,
+    height: 100,
   },
   cityDisplay: {
     height: bodyHeight,

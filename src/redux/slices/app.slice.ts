@@ -12,6 +12,7 @@ interface AppState {
       [key in Unit]: Weather[];
     };
   };
+  currentCityId: string;
 }
 
 const initialState: AppState = {
@@ -21,6 +22,7 @@ const initialState: AppState = {
   unit: 'metric',
   suggestions: [],
   weathers: {},
+  currentCityId: '',
 };
 
 export const appSlice = createSlice({
@@ -40,7 +42,6 @@ export const appSlice = createSlice({
     addCity: {
       reducer: (state, action: PayloadAction<City>) => {
         const city = action.payload;
-        console.log({ city });
         state.cities[city.id] = city;
       },
       prepare: (city: City) => ({ payload: city }),
@@ -64,6 +65,22 @@ export const appSlice = createSlice({
       prepare: (city: City, weathers: Weather[], unit: Unit) => ({
         payload: { city, weathers, unit },
       }),
+    },
+    setCurrentCityId: {
+      reducer: (state, action: PayloadAction<string>) => {
+        state.currentCityId = action.payload;
+      },
+      prepare: (cityId: string) => ({ payload: cityId }),
+    },
+    setUnit: {
+      reducer: (state, action: PayloadAction<Unit>) => {
+        state.unit = action.payload;
+      },
+      prepare: (unit: Unit) => ({ payload: unit }),
+    },
+    updateUnit: {
+      reducer: () => {},
+      prepare: (unit: Unit) => ({ payload: unit }),
     },
   },
 });
@@ -90,6 +107,7 @@ export const appSelectors = {
     const weather = state.app.weathers[cityId];
     return weather && weather[unit] ? weather[unit][0] : null;
   },
+  currentCityId: (state: RootState) => state.app.currentCityId,
 };
 
 export default appSlice;

@@ -1,12 +1,13 @@
 import Aes from 'react-native-aes-crypto';
 
-export const encrypt = async () => {
-  const apiKey = 'API_KEY';
-  const key = await Aes.randomKey(16);
-  const iv = await Aes.randomKey(16);
-  const data = await Aes.encrypt(apiKey, key, iv, 'aes-128-cbc');
-  console.log({ data, key, iv, apiKey });
-};
+// INFO: used for encryption
+// export const encrypt = async () => {
+//   const apiKey = 'API_KEY';
+//   const key = await Aes.randomKey(16);
+//   const iv = await Aes.randomKey(16);
+//   const data = await Aes.encrypt(apiKey, key, iv, 'aes-128-cbc');
+//   console.log({ data, key, iv, apiKey });
+// };
 
 export const decrypt = async (apiKey: string) => {
   try {
@@ -14,7 +15,7 @@ export const decrypt = async (apiKey: string) => {
     const result = await Aes.decrypt(data, key, iv, 'aes-128-cbc');
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 };
