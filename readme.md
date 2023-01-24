@@ -9,6 +9,10 @@
 - Go inside `ios` folder and run `pod install` for necessary pod files installation
 - Run `yarn android` for android or `yarn ios` for ios
 
+## Download Build (Android Only)
+
+- CI/CD pipeline has been created on github and application can be downloaded from the latest build action which can be accessed from [here](https://github.com/arkarmintun1/cliMate/actions)
+
 ## Services
 
 - Weather information are retrieved from [Open Weather Map](https://openweathermap.org/)
