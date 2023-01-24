@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import { City } from '../models/city';
 
 const axiosInstance = axios.create({
-  baseURL: `http://api.openweathermap.org`,
-  timeout: 10000,
+  baseURL: `https://api.openweathermap.org`,
+  timeout: 30000,
 });
 
 export const api = {
