@@ -26,6 +26,13 @@ Inside the `src` folder, there are following folders.
 - `services` - third party or in-app services that application rely on
 - `utils` - utility functions
 
+## Screenshots
+
+![Screen 1 - Today Forecast](./screenshots/screen-1.png)
+![Screen 2 - 5 Days Forecasts](./screenshots/screen-2.png)
+![Screen 3 - Cities](./screenshots/screen-3.png)
+![Screen 4 - Add City](./screenshots/screen-4.png)
+
 ## Improvements
 
 - Tests are considered but not included in current implementation. For better consistency, they should be included.
