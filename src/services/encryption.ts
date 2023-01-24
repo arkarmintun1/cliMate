@@ -1,5 +1,4 @@
 import Aes from 'react-native-aes-crypto';
-import { City } from '../models/city';
 
 export const encrypt = async () => {
   const apiKey = 'API_KEY';
@@ -20,7 +19,12 @@ export const decrypt = async (apiKey: string) => {
   }
 };
 
-export const hashCity = async (city: City) => {
+export const hashCity = async (city: {
+  name: string;
+  lat: number;
+  lon: number;
+  country: string;
+}) => {
   try {
     const hash = await Aes.sha1(
       `${city.name}${city.lat}${city.lon}${city.country}`,

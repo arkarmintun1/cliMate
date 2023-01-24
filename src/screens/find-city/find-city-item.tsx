@@ -1,19 +1,15 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { FC } from 'react';
-import { City } from '../../models/city';
 import _ from 'lodash';
+import React, { FC } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { City } from '../../models/city';
 import { useAppDispatch } from '../../redux/hooks';
-import { hashCity } from '../../services/encryption';
 import { appActions } from '../../redux/slices/app.slice';
 
 const FindCityItem: FC<City> = (city: City) => {
   const dispatch = useAppDispatch();
 
   const addCity = async () => {
-    const id = await hashCity(city);
-    if (id) {
-      dispatch(appActions.addCity(id, city));
-    }
+    dispatch(appActions.addCity(city));
   };
 
   return (

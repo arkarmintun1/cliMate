@@ -1,16 +1,18 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import {
   Dimensions,
   FlatList,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Screens } from '../../navigator/enums';
 import { RootStackParamList } from '../../navigator/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { appActions, appSelectors } from '../../redux/slices/app.slice';
+import CityWeather from './city-weather';
 
 const headerHeight = Dimensions.get('window').height * 0.2;
 const bodyHeight = Dimensions.get('window').height * 0.8;
@@ -18,14 +20,12 @@ const bodyHeight = Dimensions.get('window').height * 0.8;
 type Props = NativeStackScreenProps<RootStackParamList, Screens.Home>;
 
 const HomeScreen = ({ navigation }: Props) => {
-  const cities = [
-    'New York',
-    'Budapast',
-    'Florida',
-    'Miami',
-    'Test 1',
-    'Test 2',
-  ];
+  const dispatch = useAppDispatch();
+  const cityIds = useAppSelector(appSelectors.cityIds);
+
+  useEffect(() => {
+    dispatch(appActions.getWeathers());
+  }, [dispatch]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,24 +41,20 @@ const HomeScreen = ({ navigation }: Props) => {
       ),
       animation: 'slide_from_left',
     });
-  }, []);
+  }, [navigation]);
 
   return (
-    <View>
+    <View style={{ backgroundColor: 'white' }}>
       <View style={styles.header}></View>
       <View>
         <FlatList
-          data={cities}
+          data={cityIds}
           style={styles.cityDisplay}
-          renderItem={info => (
-            <View style={styles.cityDisplay}>
-              <Text>{info.item + info.index}</Text>
-            </View>
-          )}
+          renderItem={info => <CityWeather cityId={info.item} />}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item}
           snapToInterval={bodyHeight}
-          snapToAlignment="start"
+          decelerationRate={0}
         />
       </View>
     </View>
