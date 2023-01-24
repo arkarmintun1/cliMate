@@ -44,13 +44,15 @@ const CityWeather: FC<Props> = ({ cityId, index }) => {
           <Text style={styles.status}>{weather?.status}</Text>
         </View>
         <View style={styles.iconContainer}>
-          <Image
-            source={{
-              uri: `https://openweathermap.org/img/wn/${weather?.icon}@2x.png`,
-              width: 45,
-              height: 45,
-            }}
-          />
+          <View style={styles.iconShadow}>
+            <Image
+              source={{
+                uri: `https://openweathermap.org/img/wn/${weather?.icon}@2x.png`,
+                width: 45,
+                height: 45,
+              }}
+            />
+          </View>
         </View>
       </View>
     </Animated.View>
@@ -71,10 +73,11 @@ const styles = StyleSheet.create({
   temp: {
     fontSize: 50,
     color: 'grey',
+    flex: 1.1,
   },
   cityStatus: {
     textAlign: 'left',
-    flex: 1,
+    flex: 2,
     paddingLeft: 20,
   },
   city: {
@@ -85,7 +88,13 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     textTransform: 'capitalize',
   },
+
   iconContainer: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  iconShadow: {
     backgroundColor: 'white',
     borderRadius: 23,
     shadowColor: 'lightblue',
