@@ -1,16 +1,16 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { Screens } from '../../navigator/enums';
 import { RootStackParamList } from '../../navigator/types';
-import { appActions, appSelectors } from '../../redux/slices/app.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { appActions, appSelectors } from '../../redux/slices/app.slice';
 import FindCityItem from './find-city-item';
 
 type Props = NativeStackScreenProps<RootStackParamList, Screens.FindCity>;
 
-const FindCityScreen = ({ navigation }: Props) => {
+const FindCityScreen = ({}: Props) => {
   const headerHeight = useHeaderHeight();
   const dispatch = useAppDispatch();
   const suggestions = useAppSelector(appSelectors.suggestions);
@@ -18,10 +18,9 @@ const FindCityScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (search && search.length) {
-      console.log({ search });
       dispatch(appActions.findCity(search));
     }
-  }, [search]);
+  }, [dispatch, search]);
 
   return (
     <View style={[styles.root, { marginTop: headerHeight }]}>

@@ -1,24 +1,24 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Screens } from '../../navigator/enums';
 import { RootStackParamList } from '../../navigator/types';
-import { appSelectors } from '../../redux/slices/app.slice';
 import { useAppSelector } from '../../redux/hooks';
+import { appSelectors } from '../../redux/slices/app.slice';
+import CityWeather from './city-weather';
 import NoCity from './no-city';
 
 type Props = NativeStackScreenProps<RootStackParamList, Screens.Cities>;
 
 const CitiesScreen = ({ navigation }: Props) => {
-  const cities = useAppSelector(appSelectors.cities);
+  const cityIds = useAppSelector(appSelectors.cityIds);
   const headerHeight = useHeaderHeight();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: props => (
+      headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.navigate(Screens.Home)}>
           <Icon name="align-left" size={18} />
         </TouchableOpacity>
@@ -30,11 +30,21 @@ const CitiesScreen = ({ navigation }: Props) => {
       ),
       animation: 'slide_from_left',
     });
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={[styles.root, { marginTop: headerHeight }]}>
-      {cities && cities.length ? <Text>CitiesScreen</Text> : <NoCity />}
+      {cityIds && cityIds.length ? (
+        <FlatList
+          data={cityIds}
+          style={styles.flatList}
+          renderItem={info => (
+            <CityWeather cityId={info.item} index={info.index} />
+          )}
+        />
+      ) : (
+        <NoCity />
+      )}
     </View>
   );
 };
@@ -47,5 +57,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    backgroundColor: 'white',
+  },
+  flatList: {
+    width: '100%',
   },
 });

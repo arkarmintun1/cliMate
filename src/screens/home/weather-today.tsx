@@ -10,9 +10,18 @@ type Props = {
 };
 
 const WeatherToday: FC<Props> = ({ cityId }) => {
-  const weather = useAppSelector(appSelectors.weather(cityId));
   const unit = useAppSelector(appSelectors.unit);
-  const today = weather[unit][0];
+  const today = useAppSelector(appSelectors.todayForecastByCityId(cityId));
+
+  if (!today) {
+    return (
+      <View style={styles.root}>
+        <View style={styles.container}>
+          <Text>No Today Weather Info</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.root}>
@@ -110,6 +119,7 @@ const styles = StyleSheet.create({
   tempVariation: {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: 5,
   },
   tempMin: {
     fontWeight: 'bold',

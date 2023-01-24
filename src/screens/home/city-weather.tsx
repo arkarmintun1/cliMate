@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CityWeather: FC<Props> = ({ cityId }) => {
-  const city = useAppSelector(appSelectors.city(cityId));
+  const city = useAppSelector(appSelectors.cityById(cityId));
 
   return (
     <View style={styles.root}>

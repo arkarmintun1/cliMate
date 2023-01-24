@@ -39,7 +39,7 @@ const HomeScreen = ({ navigation }: Props) => {
           <Icon name="search" size={18} />
         </TouchableOpacity>
       ),
-      animation: 'slide_from_left',
+      animation: 'slide_from_right',
     });
   }, [navigation]);
 

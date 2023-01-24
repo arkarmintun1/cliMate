@@ -9,13 +9,13 @@ type Props = {
 };
 
 const WeatherForecast: FC<Props> = ({ cityId }) => {
-  const weather = useAppSelector(appSelectors.weather(cityId));
-  const unit = useAppSelector(appSelectors.unit);
-  const forecasts = weather[unit];
+  const forecasts = useAppSelector(
+    appSelectors.fiveDayForecastsByCityId(cityId),
+  );
 
   return (
     <View style={styles.root}>
-      {forecasts.map((forecast, index) => {
+      {forecasts?.map((forecast, index) => {
         const date = moment(new Date(forecast.date));
         return (
           <View key={index} style={styles.card}>

@@ -77,8 +77,19 @@ export const appSelectors = {
   suggestions: (state: RootState) => state.app.suggestions,
   cityIds: (state: RootState) =>
     state.app.weathers ? Object.keys(state.app.weathers) : [],
-  city: (cityId: string) => (state: RootState) => state.app.cities[cityId],
-  weather: (cityId: string) => (state: RootState) => state.app.weathers[cityId],
+  cityById: (cityId: string) => (state: RootState) => state.app.cities[cityId],
+  weatherByCityId: (cityId: string) => (state: RootState) =>
+    state.app.weathers[cityId],
+  fiveDayForecastsByCityId: (cityId: string) => (state: RootState) => {
+    const unit = state.app.unit;
+    const weather = state.app.weathers[cityId];
+    return weather ? weather[unit] : null;
+  },
+  todayForecastByCityId: (cityId: string) => (state: RootState) => {
+    const unit = state.app.unit;
+    const weather = state.app.weathers[cityId];
+    return weather && weather[unit] ? weather[unit][0] : null;
+  },
 };
 
 export default appSlice;
