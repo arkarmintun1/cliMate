@@ -20,6 +20,7 @@ import { Screens } from '../../navigator/enums';
 import { RootStackParamList } from '../../navigator/types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { appActions, appSelectors } from '../../redux/slices/app.slice';
+import NoCity from '../cities/no-city';
 import CityWeather from './city-weather';
 
 const headerHeight = Dimensions.get('window').height * 0.2;
@@ -86,17 +87,23 @@ const HomeScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <View>
-        <FlatList
-          data={cityIds}
-          style={styles.cityDisplay}
-          renderItem={info => <CityWeather cityId={info.item} />}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item}
-          pagingEnabled
-          viewabilityConfigCallbackPairs={
-            viewabilityConfigCallbackPairs.current
-          }
-        />
+        {cityIds && cityIds.length ? (
+          <FlatList
+            data={cityIds}
+            style={styles.cityDisplay}
+            renderItem={info => <CityWeather cityId={info.item} />}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={item => item}
+            pagingEnabled
+            viewabilityConfigCallbackPairs={
+              viewabilityConfigCallbackPairs.current
+            }
+          />
+        ) : (
+          <View style={styles.cityDisplay}>
+            <NoCity />
+          </View>
+        )}
       </View>
     </View>
   );
