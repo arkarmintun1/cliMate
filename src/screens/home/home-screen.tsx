@@ -1,11 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -13,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewabilityConfigCallbackPairs,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Screens } from '../../navigator/enums';
@@ -49,18 +42,16 @@ const HomeScreen = ({ navigation }: Props) => {
     }
   }, [cities, currentCityId]);
 
-  const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: any }) => {
-      const cityId = viewableItems[0].key;
-      dispatch(appActions.setCurrentCityId(cityId));
-    },
-    [dispatch],
-  );
+  const viewabilityConfigRef = React.useRef({
+    viewAreaCoveragePercentThreshold: 80,
+  });
 
-  const viewabilityConfigCallbackPairs = useRef<ViewabilityConfigCallbackPairs>(
-    // @ts-ignore
-    [{ onViewableItemsChanged }],
-  );
+  const onViewableItemsChangedRef = React.useRef((info: any) => {
+    const cityId = info?.viewableItems[0]?.key;
+    if (cityId) {
+      dispatch(appActions.setCurrentCityId(cityId));
+    }
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -95,9 +86,8 @@ const HomeScreen = ({ navigation }: Props) => {
             showsVerticalScrollIndicator={false}
             keyExtractor={item => item}
             pagingEnabled
-            viewabilityConfigCallbackPairs={
-              viewabilityConfigCallbackPairs.current
-            }
+            onViewableItemsChanged={onViewableItemsChangedRef.current}
+            viewabilityConfig={viewabilityConfigRef.current}
           />
         ) : (
           <View style={styles.cityDisplay}>

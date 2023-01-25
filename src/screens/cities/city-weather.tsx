@@ -38,7 +38,9 @@ const CityWeather: FC<Props> = ({ cityId, index }) => {
   return (
     <Animated.View style={{ left: slideAnim }}>
       <View style={styles.root}>
-        <Text style={styles.temp}>{`${weather?.temp?.toFixed(0)}°`}</Text>
+        <Text style={styles.temp}>
+          {`${weather?.temp?.toFixed(0) ?? '-'}°`}
+        </Text>
         <View style={styles.cityStatus}>
           <Text style={styles.city}>{city?.name}</Text>
           <Text style={styles.status}>{weather?.status}</Text>

@@ -35,6 +35,7 @@ const FindCityScreen = ({}: Props) => {
           style={styles.flatList}
           data={suggestions}
           renderItem={info => <FindCityItem {...info.item} />}
+          keyExtractor={(_, index) => index.toString()}
         />
       </View>
     </View>
